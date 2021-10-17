@@ -1,5 +1,6 @@
 //#include <M5Core2.h> 
-#include "heltec.h"
+//#include "heltec.h"
+
 #include "NimBLEDevice.h"
 
 /*
@@ -181,11 +182,14 @@ void setup() {
   M5.Lcd.println("BLE BT Test");
   Serial.println("Started");
 */
-  Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);
+/*
+  Heltec.begin(true , false , true );
   Heltec.display->clear();
   Heltec.display->drawString(0, 0, "BLE Server Test");
   Heltec.display->display();
+*/
 
+  Serial.begin(115200);
   NimBLEDevice::init("BLE Server Test");
 
   //NimBLEDevice::setSecurityAuth(BLE_SM_PAIR_AUTHREQ_BOND /*| BLE_SM_PAIR_AUTHREQ_MITM |*/ | BLE_SM_PAIR_AUTHREQ_SC);
@@ -201,17 +205,10 @@ void setup() {
   pCharacteristic_send->setCallbacks(&chrCallbacks_s);
         
   pService->start();
-//  pCharacteristic_send->setValue("Hello BLE");
 
   NimBLEAdvertising *pAdvertising = NimBLEDevice::getAdvertising(); // create advertising instance
 
-/* THIS MAKES IT WORSE!!
-  uint8_t AdvData[] = {0xee, 0x03, 0x08, 0xeb, 0xed, 0x4e, 0x47, 0x07};
-  NimBLEAdvertisementData oAdvertisementCustom = NimBLEAdvertisementData();
-  oAdvertisementCustom.setManufacturerData(std::string((char *)&AdvData[0], 8)); 
-  pAdvertising->setAdvertisementData(oAdvertisementCustom);
-*/
-  
+ 
   pAdvertising->addServiceUUID(pService->getUUID()); // tell advertising the UUID of our service
   pAdvertising->setScanResponse(true);
   pAdvertising->start(); // start advertising
